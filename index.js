@@ -5,18 +5,17 @@ const app = express();
 const JSON_URL = "https://pez8.up.railway.app/";
 
 app.get("/", (req, res) => {
-  res.send("Ciao! Vai su /playlist.w3u per ottenere il JSON originale aggiornato.");
+  res.send("Ciao! Vai su /playlist.w3u per ottenere la playlist in JSON identica all’originale.");
 });
 
-// Questo endpoint restituisce il JSON originale, ma con estensione .w3u
 app.get("/playlist.w3u", async (req, res) => {
   try {
     const response = await fetch(JSON_URL);
-    const data = await response.json();
+    const json = await response.json();
 
-    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.setHeader("Content-Disposition", "attachment; filename=playlist.w3u");
-    res.json(data);
+    res.send(JSON.stringify(json, null, 2)); // Indenta per leggibilità (opzionale)
   } catch (err) {
     res.status(500).send("Errore nel recupero del JSON");
   }
